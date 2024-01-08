@@ -164,7 +164,7 @@ namespace AmmoLog
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();
-                SqlCommand cmd1 = new SqlCommand("SELECT Ammo.AmmoId FROM Ammo,Calibers WHERE Ammo.Brand+' '+Calibers.Caliber+' '+CONVERT(VARCHAR(20),Ammo.Weight)+'gr '+Ammo.Style ='" + cmbSessionAmmo.Text + "';", conn);
+                SqlCommand cmd1 = new SqlCommand("SELECT a.AmmoId FROM Ammo a,Calibers c WHERE a.Brand+' '+c.Caliber+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style ='" + cmbSessionAmmo.Text + "';", conn);
                 SqlDataReader calRdr = null;
                 calRdr = cmd1.ExecuteReader();
                 while (calRdr.Read())
