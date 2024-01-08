@@ -11,14 +11,19 @@ using System.Windows.Forms;
 
 namespace AmmoLog
 {
-    public partial class Form1 : Form
+    public partial class ALMain : Form
     {
         static string ConnString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Users\\nelis\\source\\repos\\AmmoLog\\AmmoLogDB.mdf;Integrated Security=True;Connect Timeout=30";
         SqlConnection con   = new SqlConnection(ConnString);
         string selectedFACaliber,selectedFA,selectedAmmo;
-        public Form1()
+        public ALMain()
         {
             InitializeComponent();
+
+            LoadFAList();
+            LoadCaliberList();
+            LoadAmmoList();
+            LoadSessionData();
 
             SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Firearms", ConnString);
             DataSet ds = new DataSet();
@@ -28,15 +33,6 @@ namespace AmmoLog
             DataSet ds1 = new DataSet();
             da1.Fill(ds1, "Sessions");
             dataGridView1.DataSource = ds1.Tables["Sessions"].DefaultView;
-
-            LoadCaliberList();
-            LoadAmmoList();
-            LoadFAList();
-
-            SqlDataAdapter dafa = new SqlDataAdapter("SELECT * FROM Firearms", ConnString);
-            DataSet dsfa = new DataSet();
-            dafa.Fill(dsfa, "Firearms");
-            dataGridView1.DataSource = dsfa.Tables["Firearms"].DefaultView;
         }
 
         private void btnAddFA_Click(object sender, EventArgs e)
@@ -67,7 +63,7 @@ namespace AmmoLog
         private void btnAddAmmo_Click(object sender, EventArgs e)
         {
             con.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Ammo(Brand,Caliber,Weight,Style) Values('" + tbAmmoBrand.Text + "','" + cmbAmmoCaliber.Text + "','" + Convert.ToInt32(numAmmoWeight.Value) + "','" + cmbAmmoStyle.Text + "')", con);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Ammo(Brand,Caliber,Weight,Style) Values('" + tbAmmoBrand.Text + "','" + cmbAmmoCaliber.SelectedValue + "','" + Convert.ToInt32(numAmmoWeight.Value) + "','" + cmbAmmoStyle.Text + "')", con);
             cmd.ExecuteNonQuery();
             con.Close();
 
@@ -81,20 +77,20 @@ namespace AmmoLog
                 try
                 {
                     string query = "SELECT * from Calibers";
-                    SqlDataAdapter dacb = new SqlDataAdapter(query, conn);
+                    SqlDataAdapter daListC = new SqlDataAdapter(query, conn);
                     conn.Open();
-                    DataSet dscb = new DataSet();
-                    dacb.Fill(dscb, "Calibers");
+                    DataSet dsListC = new DataSet();
+                    daListC.Fill(dsListC, "Calibers");
                     cmbFACaliber.DisplayMember = "Caliber";
                     cmbFACaliber.ValueMember = "CalId";
-                    cmbFACaliber.DataSource = dscb.Tables["Calibers"];
+                    cmbFACaliber.DataSource = dsListC.Tables["Calibers"];
                     cmbAmmoCaliber.DisplayMember = "Caliber";
                     cmbAmmoCaliber.ValueMember = "CalId";
-                    cmbAmmoCaliber.DataSource = dscb.Tables["Calibers"];
+                    cmbAmmoCaliber.DataSource = dsListC.Tables["Calibers"];
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error occured!");
+                    MessageBox.Show("Error occured, LoadCaliberList!" + ex.ToString());
                 }
             }
         }
@@ -105,22 +101,27 @@ namespace AmmoLog
             {
                 try
                 {
-                    string query = "SELECT Brand+' '+Model+' '+Serial AS FA from Firearms";
-                    SqlDataAdapter dafa = new SqlDataAdapter(query, conn);
+                    string query = "SELECT Serial, Brand+' '+Model+' '+Serial AS FA from Firearms";
+                    SqlDataAdapter daListFa = new SqlDataAdapter(query, conn);
                     conn.Open();
-                    DataSet dsfa = new DataSet();
-                    dafa.Fill(dsfa, "Firearms");
+                    DataSet dsListFa = new DataSet();
+                    daListFa.Fill(dsListFa, "Firearms");
                     cmbSessionFA.DisplayMember = "FA";
                     cmbSessionFA.ValueMember = "Serial";
-                    cmbSessionFA.DataSource = dsfa.Tables["Firearms"];
+                    cmbSessionFA.DataSource = dsListFa.Tables["Firearms"];
                     cmbResultsFA.DisplayMember = "FA";
                     cmbResultsFA.ValueMember = "Serial";
-                    cmbResultsFA.DataSource = dsfa.Tables["Firearms"];
+                    cmbResultsFA.DataSource = dsListFa.Tables["Firearms"];
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error occured, LoadFAList!");
+                    MessageBox.Show("Error occured, LoadFAList!" + ex.ToString());
                 }
+
+                SqlDataAdapter dagridfa = new SqlDataAdapter("SELECT f.Brand,f.Model,f.Serial,c.Caliber FROM Firearms f INNER JOIN Calibers c ON f.Caliber=c.CalId", ConnString);
+                DataSet dsgridfa = new DataSet();
+                dagridfa.Fill(dsgridfa, "Firearms");
+                dataGridView1.DataSource = dsgridfa.Tables["Firearms"].DefaultView;
             }
         }
 
@@ -130,24 +131,36 @@ namespace AmmoLog
             {
                 try
                 {
-                    string query = "SELECT Ammo.Brand+' '+Calibers.Caliber+' '+CONVERT(VARCHAR(20),Ammo.Weight)+'gr '+Ammo.Style AS Ammunition from Ammo,Calibers WHERE Ammo.Caliber='" + selectedFACaliber +"' AND Calibers.CalId ='" + selectedFACaliber +"';";
-                    SqlDataAdapter daam = new SqlDataAdapter(query, conn);
+                    string query = "SELECT a.AmmoId,a.Brand+' '+c.Caliber+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS Ammunition FROM Ammo a INNER JOIN Calibers c ON a.Caliber='" + selectedFACaliber +"' AND c.CalId ='" + selectedFACaliber +"';";
+                    SqlDataAdapter daListA = new SqlDataAdapter(query, conn);
                     conn.Open();
-                    DataSet dsam = new DataSet();
-                    daam.Fill(dsam, "Ammo");
+                    DataSet dsListA = new DataSet();
+                    daListA.Fill(dsListA, "Ammo");
                     cmbSessionAmmo.DisplayMember = "Ammunition";
-                    cmbSessionAmmo.ValueMember = "Ammunition";
-                    cmbSessionAmmo.DataSource = dsam.Tables["Ammo"];
+                    cmbSessionAmmo.ValueMember = "AmmoId";
+                    cmbSessionAmmo.DataSource = dsListA.Tables["Ammo"];
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error occured, LoadAmmoList!");
+                    MessageBox.Show("Error occured, LoadAmmoList!" + ex.ToString());
                 }
+            }
+        }
+
+        private void LoadSessionData()
+        {
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                SqlDataAdapter da = new SqlDataAdapter("SELECT f.Brand+' '+f.Model+' '+f.Serial AS Firearm, a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS Ammunition, RoundCount, Failures, GroupSize, Distance, RangeName, Date FROM Sessions s,Firearms f,Ammo a WHERE s.Firearm=f.Serial AND a.AmmoId=s.Ammo", ConnString);
+                DataSet ds = new DataSet();
+                da.Fill(ds, "Sessions");
+                dataGridView4.DataSource = ds.Tables["Sessions"].DefaultView;
             }
         }
 
         private void cmbSessionAmmo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //MessageBox.Show(cmbSessionAmmo.SelectedValue.ToString());
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();
@@ -180,12 +193,12 @@ namespace AmmoLog
 
         private void cmbResultsFA_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SqlDataAdapter darel = new SqlDataAdapter("SELECT Ammo,SUM(Failures) AS Failures,SUM(RoundCount) AS 'Round Count',(SUM(Failures)/SUM(RoundCount)) AS 'Failure Rate' FROM Sessions GROUP BY Ammo", ConnString);
+            SqlDataAdapter darel = new SqlDataAdapter("SELECT Ammo,SUM(Failures) AS Failures,SUM(RoundCount) AS 'Round Count',(SUM(Failures)/SUM(RoundCount)) AS 'Failure Rate' FROM Sessions s WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY Ammo ORDER BY 'Failure Rate' ASC", ConnString);
             DataSet dsrel = new DataSet();
             darel.Fill(dsrel, "Sessions");
             dGVReliablility.DataSource = dsrel.Tables["Sessions"].DefaultView;
 
-            SqlDataAdapter daacc = new SqlDataAdapter("SELECT Ammo,AVG(GroupSize) AS 'Average Group' FROM Sessions GROUP BY Ammo", ConnString);
+            SqlDataAdapter daacc = new SqlDataAdapter("SELECT Ammo,AVG(GroupSize) AS 'Average Group' FROM Sessions s WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY Ammo ORDER BY 'Average Group' ASC", ConnString);
             DataSet dsacc = new DataSet();
             daacc.Fill(dsacc, "Sessions");
             dGVAccuracy.DataSource = dsacc.Tables["Sessions"].DefaultView;
@@ -198,10 +211,7 @@ namespace AmmoLog
             cmd.ExecuteNonQuery();
             con.Close();
 
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Sessions", ConnString);
-            DataSet ds = new DataSet();
-            da.Fill(ds, "Sessions");
-            dataGridView4.DataSource = ds.Tables["Sessions"].DefaultView;
+            LoadSessionData();
         }
     }
 }

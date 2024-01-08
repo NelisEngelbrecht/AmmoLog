@@ -1,6 +1,6 @@
 ﻿namespace AmmoLog
 {
-    partial class Form1
+    partial class ALMain
     {
         /// <summary>
         /// Required designer variable.
