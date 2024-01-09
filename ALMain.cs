@@ -154,7 +154,7 @@ namespace AmmoLog
             {
                 try
                 {
-                    string query = "SELECT * from Calibers";
+                    string query = "SELECT * from Calibers ORDER BY Caliber";
                     SqlDataAdapter daListC = new SqlDataAdapter(query, conn);
                     conn.Open();
                     DataSet dsListC = new DataSet();
@@ -217,7 +217,7 @@ namespace AmmoLog
             {
                 try
                 {
-                    string query = "SELECT a.AmmoId,a.Brand+' '+c.Caliber+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS Ammunition FROM Ammo a INNER JOIN Calibers c ON a.Caliber='" + cmbAmmoCaliber.SelectedValue + "' AND c.CalId ='" + cmbAmmoCaliber.SelectedValue + "';";
+                    string query = "SELECT a.AmmoId,a.Brand+' '+c.Caliber+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS Ammunition FROM Ammo a INNER JOIN Calibers c ON a.Caliber='" + cmbAmmoCaliber.SelectedValue + "' AND c.CalId ='" + cmbAmmoCaliber.SelectedValue + "' ORDER BY a.Brand,a.Weight ASC;";
                     SqlDataAdapter daListA = new SqlDataAdapter(query, conn);
                     conn.Open();
                     DataSet dsListA = new DataSet();
@@ -250,12 +250,12 @@ namespace AmmoLog
         //Loads results data from table, does some calculations and populates relevant datagridviews
         private void LoadResults()
         {
-            SqlDataAdapter daRel = new SqlDataAdapter("SELECT a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS 'Ammunition',SUM(Failures) AS Failures,SUM(RoundCount) AS 'Round Count',(SUM(Failures)/SUM(RoundCount)) AS 'Failure Rate' FROM Sessions s INNER JOIN Ammo a ON s.Ammo=a.AmmoId WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY s.Ammo,a.Brand,a.Weight,a.Style ORDER BY 'Failure Rate' ASC", ConnString);
+            SqlDataAdapter daRel = new SqlDataAdapter("SELECT a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS 'Ammunition',SUM(Failures) AS Failures,SUM(RoundCount) AS 'Round Count',(SUM(Failures)/SUM(RoundCount)) AS 'Failure Rate' FROM Sessions s INNER JOIN Ammo a ON s.Ammo=a.AmmoId WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY s.Ammo,a.Brand,a.Weight,a.Style ORDER BY 'Failure Rate',a.Brand ASC", ConnString);
             DataSet dsRel = new DataSet();
             daRel.Fill(dsRel, "Sessions");
             dgvReliablility.DataSource = dsRel.Tables["Sessions"].DefaultView;
 
-            SqlDataAdapter daAcc = new SqlDataAdapter("SELECT a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS 'Ammunition',AVG(s.GroupSize) AS 'Average Group',AVG(s.Distance) AS 'Average Distance',(AVG(s.GroupSize)/AVG(s.Distance)) AS 'Accuracy Rating' FROM Sessions s INNER JOIN Ammo a ON s.Ammo=a.AmmoId WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY s.Ammo,a.Brand,a.Weight,a.Style ORDER BY 'Average Group' ASC", ConnString);
+            SqlDataAdapter daAcc = new SqlDataAdapter("SELECT a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS 'Ammunition',AVG(s.GroupSize) AS 'Average Group',AVG(s.Distance) AS 'Average Distance',(AVG(s.GroupSize)/AVG(s.Distance)) AS 'Accuracy Rating' FROM Sessions s INNER JOIN Ammo a ON s.Ammo=a.AmmoId WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY s.Ammo,a.Brand,a.Weight,a.Style ORDER BY 'Accuracy Rating',a.Brand ASC", ConnString);
             DataSet dsAcc = new DataSet();
             daAcc.Fill(dsAcc, "Sessions");
             dgvAccuracy.DataSource = dsAcc.Tables["Sessions"].DefaultView;

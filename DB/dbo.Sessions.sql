@@ -6,8 +6,8 @@
     [Ammo]       INT          NULL,
     [RoundCount] FLOAT (53)   NULL,
     [Failures]   FLOAT (53)   NULL,
-    [GroupSize]  FLOAT        NULL,
-    [Distance]   FLOAT		  NULL,
+    [GroupSize]  FLOAT (53)   NULL,
+    [Distance]   FLOAT (53)   NULL,
     PRIMARY KEY CLUSTERED ([SessionId] ASC),
     FOREIGN KEY ([Firearm]) REFERENCES [dbo].[Firearms] ([Serial]),
     FOREIGN KEY ([Ammo]) REFERENCES [dbo].[Ammo] ([AmmoId])
