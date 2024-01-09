@@ -83,6 +83,7 @@
             this.dgvReliablility = new System.Windows.Forms.DataGridView();
             this.cmbResultsFA = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
+            this.btnRefreshResults = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFA)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -594,6 +595,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.btnRefreshResults);
             this.tabPage5.Controls.Add(this.label22);
             this.tabPage5.Controls.Add(this.label21);
             this.tabPage5.Controls.Add(this.dgvAccuracy);
@@ -659,6 +661,16 @@
             this.label20.Size = new System.Drawing.Size(41, 13);
             this.label20.TabIndex = 29;
             this.label20.Text = "Firearm";
+            // 
+            // btnRefreshResults
+            // 
+            this.btnRefreshResults.Location = new System.Drawing.Point(206, 4);
+            this.btnRefreshResults.Name = "btnRefreshResults";
+            this.btnRefreshResults.Size = new System.Drawing.Size(75, 23);
+            this.btnRefreshResults.TabIndex = 35;
+            this.btnRefreshResults.Text = "Refresh";
+            this.btnRefreshResults.UseVisualStyleBackColor = true;
+            this.btnRefreshResults.Click += new System.EventHandler(this.btnRefreshResults_Click);
             // 
             // ALMain
             // 
@@ -749,6 +761,7 @@
         private System.Windows.Forms.DataGridView dgvReliablility;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.DataGridView dgvSession;
+        private System.Windows.Forms.Button btnRefreshResults;
     }
 }
 

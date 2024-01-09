@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace AmmoLog
 {
@@ -22,49 +23,96 @@ namespace AmmoLog
             LoadCaliberList();
             LoadAmmoList();
             LoadSessionData();
+            LoadResults();
+
+            btnRefreshResults.Enabled = false;
         }
 
         private void btnAddFA_Click(object sender, EventArgs e)
-        {
-            using (SqlConnection conn = new SqlConnection(ConnString))
+        {   try
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Firearms(Brand,Model,Serial,Caliber) Values('" + tbFABrand.Text + "','" + tbFAModel.Text + "','" + tbFASerial.Text + "','" + cmbFACaliber.SelectedValue + "')", conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
-            }
-            LoadFAList();
+                if (!string.IsNullOrEmpty(tbFABrand.Text) && tbFABrand.Text.Length <= 20)
+                {
+                    if (!string.IsNullOrEmpty(tbFAModel.Text) && tbFAModel.Text.Length <= 20)
+                    {
+                        if (!string.IsNullOrEmpty(tbFASerial.Text) && tbFASerial.Text.Length <= 40)
+                        {
+                            using (SqlConnection conn = new SqlConnection(ConnString))
+                            {
+                                conn.Open();
+                                SqlCommand cmd = new SqlCommand("INSERT INTO Firearms(Brand,Model,Serial,Caliber) Values('" + tbFABrand.Text + "','" + tbFAModel.Text + "','" + tbFASerial.Text + "','" + cmbFACaliber.SelectedValue + "')", conn);
+                                cmd.ExecuteNonQuery();
+                                conn.Close();
+                            }
+                            LoadFAList();
 
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Firearms", ConnString);
-            DataSet ds = new DataSet();
-            da.Fill(ds, "Firearms");
-            dgvFA.DataSource = ds.Tables["Firearms"].DefaultView;
+                            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Firearms", ConnString);
+                            DataSet ds = new DataSet();
+                            da.Fill(ds, "Firearms");
+                            dgvFA.DataSource = ds.Tables["Firearms"].DefaultView;
+                        }
+                        else
+                            MessageBox.Show("Please enter a serial number.");
+                    }
+                    else
+                        MessageBox.Show("Please enter a model.");
+                }
+                else
+                    MessageBox.Show("Please enter a brand.");
+            }
+            catch
+            {
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    SqlDataAdapter da = new SqlDataAdapter("SELECT f.Brand,f.Model,f.Serial,c.Caliber FROM Firearms f INNER JOIN Calibers c ON f.Caliber=c.CalId WHERE f.Serial='" + tbFASerial.Text + "'", ConnString);
+                    DataSet ds = new DataSet();
+                    da.Fill(ds, "Firearms");
+                    dgvFA.DataSource = ds.Tables["Firearms"].DefaultView;
+                }
+                MessageBox.Show("Please verify your serial number and firearm, existing firearm with the same serial number is shown below.");  
+            }
+
         }
 
         private void btnAddCaliber_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            if (!string.IsNullOrEmpty(tbCal.Text) && tbCal.Text.Length <= 20)
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Calibers(Caliber) Values('" + tbCal.Text + "')", conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                using (SqlConnection conn = new SqlConnection(ConnString))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("INSERT INTO Calibers(Caliber) Values('" + tbCal.Text + "')", conn);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
+            else
+                MessageBox.Show("Please enter a name for the caliber.");
 
             LoadCaliberList();
         }
 
         private void btnAddAmmo_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            if (!string.IsNullOrEmpty(tbAmmoBrand.Text) && tbAmmoBrand.Text.Length <= 40 )
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("INSERT INTO Ammo(Brand,Caliber,Weight,Style) Values('" + tbAmmoBrand.Text + "','" + cmbAmmoCaliber.SelectedValue + "','" + Convert.ToInt32(numAmmoWeight.Value) + "','" + cmbAmmoStyle.Text + "')", conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
-            }
+                if (!string.IsNullOrEmpty(cmbAmmoStyle.Text))
+                {
+                    using (SqlConnection conn = new SqlConnection(ConnString))
+                    {
+                        conn.Open();
+                        SqlCommand cmd = new SqlCommand("INSERT INTO Ammo(Brand,Caliber,Weight,Style) Values('" + tbAmmoBrand.Text + "','" + cmbAmmoCaliber.SelectedValue + "','" + Convert.ToInt32(numAmmoWeight.Value) + "','" + cmbAmmoStyle.Text + "')", conn);
+                        cmd.ExecuteNonQuery();
+                        conn.Close();
+                    }
 
-            LoadAmmoList();
+                    LoadAmmoList();
+                }
+                else
+                    MessageBox.Show("Please enter a bullet style.");
+            }
+            else
+                MessageBox.Show("Please enter a brand.");
         }
 
         private void LoadCaliberList()
@@ -167,12 +215,7 @@ namespace AmmoLog
             }
         }
 
-        private void cmbSessionFA_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            LoadAmmoList();
-        }
-
-        private void cmbResultsFA_SelectedIndexChanged(object sender, EventArgs e)
+        private void LoadResults()
         {
             SqlDataAdapter daRel = new SqlDataAdapter("SELECT a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS 'Ammunition',SUM(Failures) AS Failures,SUM(RoundCount) AS 'Round Count',(SUM(Failures)/SUM(RoundCount)) AS 'Failure Rate' FROM Sessions s INNER JOIN Ammo a ON s.Ammo=a.AmmoId WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY s.Ammo,a.Brand,a.Weight,a.Style ORDER BY 'Failure Rate' ASC", ConnString);
             DataSet dsRel = new DataSet();
@@ -183,6 +226,18 @@ namespace AmmoLog
             DataSet dsAcc = new DataSet();
             daAcc.Fill(dsAcc, "Sessions");
             dgvAccuracy.DataSource = dsAcc.Tables["Sessions"].DefaultView;
+
+            btnRefreshResults.Enabled = false;
+        }
+
+        private void cmbSessionFA_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadAmmoList();
+        }
+
+        private void cmbResultsFA_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadResults();
         }
 
         private void btnAddSession_Click(object sender, EventArgs e)
@@ -196,6 +251,13 @@ namespace AmmoLog
             }
 
             LoadSessionData();
+
+            btnRefreshResults.Enabled = true;
+        }
+
+        private void btnRefreshResults_Click(object sender, EventArgs e)
+        {
+            LoadResults();
         }
     }
 }
