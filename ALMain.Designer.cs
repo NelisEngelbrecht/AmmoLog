@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvFA = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.cmbFACaliber = new System.Windows.Forms.ComboBox();
@@ -56,7 +56,7 @@
             this.btnAddCaliber = new System.Windows.Forms.Button();
             this.tbCal = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.dataGridView4 = new System.Windows.Forms.DataGridView();
+            this.dgvSession = new System.Windows.Forms.DataGridView();
             this.numFailures = new System.Windows.Forms.NumericUpDown();
             this.label19 = new System.Windows.Forms.Label();
             this.cmbSessionAmmo = new System.Windows.Forms.ComboBox();
@@ -79,34 +79,34 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.dGVAccuracy = new System.Windows.Forms.DataGridView();
-            this.dGVReliablility = new System.Windows.Forms.DataGridView();
+            this.dgvAccuracy = new System.Windows.Forms.DataGridView();
+            this.dgvReliablility = new System.Windows.Forms.DataGridView();
             this.cmbResultsFA = new System.Windows.Forms.ComboBox();
             this.label20 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFA)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numAmmoWeight)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSession)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFailures)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGroupSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumRoundCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDistance)).BeginInit();
             this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dGVAccuracy)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dGVReliablility)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAccuracy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReliablility)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dgvFA
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 140);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(756, 254);
-            this.dataGridView1.TabIndex = 0;
+            this.dgvFA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFA.Location = new System.Drawing.Point(6, 140);
+            this.dgvFA.Name = "dgvFA";
+            this.dgvFA.Size = new System.Drawing.Size(756, 254);
+            this.dgvFA.TabIndex = 0;
             // 
             // tabControl1
             // 
@@ -132,11 +132,11 @@
             this.tabPage1.Controls.Add(this.tbFASerial);
             this.tabPage1.Controls.Add(this.tbFAModel);
             this.tabPage1.Controls.Add(this.tbFABrand);
-            this.tabPage1.Controls.Add(this.dataGridView1);
+            this.tabPage1.Controls.Add(this.dgvFA);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(768, 400);
+            this.tabPage1.Size = new System.Drawing.Size(770, 591);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Firearms";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -232,7 +232,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(768, 400);
+            this.tabPage2.Size = new System.Drawing.Size(770, 591);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Ammo";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -343,7 +343,7 @@
             this.tabPage3.Controls.Add(this.tbCal);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(768, 400);
+            this.tabPage3.Size = new System.Drawing.Size(770, 591);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Calibers";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -376,7 +376,7 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.dataGridView4);
+            this.tabPage4.Controls.Add(this.dgvSession);
             this.tabPage4.Controls.Add(this.numFailures);
             this.tabPage4.Controls.Add(this.label19);
             this.tabPage4.Controls.Add(this.cmbSessionAmmo);
@@ -403,17 +403,22 @@
             this.tabPage4.Text = "Sessions";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // dataGridView4
+            // dgvSession
             // 
-            this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView4.Location = new System.Drawing.Point(6, 252);
-            this.dataGridView4.Name = "dataGridView4";
-            this.dataGridView4.Size = new System.Drawing.Size(761, 336);
-            this.dataGridView4.TabIndex = 42;
+            this.dgvSession.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSession.Location = new System.Drawing.Point(6, 252);
+            this.dgvSession.Name = "dgvSession";
+            this.dgvSession.Size = new System.Drawing.Size(761, 336);
+            this.dgvSession.TabIndex = 42;
             // 
             // numFailures
             // 
             this.numFailures.Location = new System.Drawing.Point(79, 137);
+            this.numFailures.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.numFailures.Name = "numFailures";
             this.numFailures.Size = new System.Drawing.Size(120, 20);
             this.numFailures.TabIndex = 41;
@@ -435,7 +440,6 @@
             this.cmbSessionAmmo.Name = "cmbSessionAmmo";
             this.cmbSessionAmmo.Size = new System.Drawing.Size(282, 21);
             this.cmbSessionAmmo.TabIndex = 39;
-            this.cmbSessionAmmo.SelectedIndexChanged += new System.EventHandler(this.cmbSessionAmmo_SelectedIndexChanged);
             // 
             // label18
             // 
@@ -449,6 +453,11 @@
             // numGroupSize
             // 
             this.numGroupSize.Location = new System.Drawing.Point(79, 189);
+            this.numGroupSize.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.numGroupSize.Name = "numGroupSize";
             this.numGroupSize.Size = new System.Drawing.Size(120, 20);
             this.numGroupSize.TabIndex = 37;
@@ -474,6 +483,11 @@
             // NumRoundCount
             // 
             this.NumRoundCount.Location = new System.Drawing.Point(79, 163);
+            this.NumRoundCount.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.NumRoundCount.Name = "NumRoundCount";
             this.NumRoundCount.Size = new System.Drawing.Size(120, 20);
             this.NumRoundCount.TabIndex = 34;
@@ -506,6 +520,11 @@
             // numDistance
             // 
             this.numDistance.Location = new System.Drawing.Point(79, 84);
+            this.numDistance.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.numDistance.Name = "numDistance";
             this.numDistance.Size = new System.Drawing.Size(120, 20);
             this.numDistance.TabIndex = 30;
@@ -577,13 +596,13 @@
             // 
             this.tabPage5.Controls.Add(this.label22);
             this.tabPage5.Controls.Add(this.label21);
-            this.tabPage5.Controls.Add(this.dGVAccuracy);
-            this.tabPage5.Controls.Add(this.dGVReliablility);
+            this.tabPage5.Controls.Add(this.dgvAccuracy);
+            this.tabPage5.Controls.Add(this.dgvReliablility);
             this.tabPage5.Controls.Add(this.cmbResultsFA);
             this.tabPage5.Controls.Add(this.label20);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(768, 400);
+            this.tabPage5.Size = new System.Drawing.Size(770, 591);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Results";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -591,7 +610,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(249, 46);
+            this.label22.Location = new System.Drawing.Point(3, 281);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(52, 13);
             this.label22.TabIndex = 34;
@@ -606,21 +625,21 @@
             this.label21.TabIndex = 33;
             this.label21.Text = "Reliability";
             // 
-            // dGVAccuracy
+            // dgvAccuracy
             // 
-            this.dGVAccuracy.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dGVAccuracy.Location = new System.Drawing.Point(252, 62);
-            this.dGVAccuracy.Name = "dGVAccuracy";
-            this.dGVAccuracy.Size = new System.Drawing.Size(240, 150);
-            this.dGVAccuracy.TabIndex = 32;
+            this.dgvAccuracy.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAccuracy.Location = new System.Drawing.Point(6, 297);
+            this.dgvAccuracy.Name = "dgvAccuracy";
+            this.dgvAccuracy.Size = new System.Drawing.Size(378, 216);
+            this.dgvAccuracy.TabIndex = 32;
             // 
-            // dGVReliablility
+            // dgvReliablility
             // 
-            this.dGVReliablility.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dGVReliablility.Location = new System.Drawing.Point(6, 62);
-            this.dGVReliablility.Name = "dGVReliablility";
-            this.dGVReliablility.Size = new System.Drawing.Size(240, 150);
-            this.dGVReliablility.TabIndex = 31;
+            this.dgvReliablility.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvReliablility.Location = new System.Drawing.Point(6, 62);
+            this.dgvReliablility.Name = "dgvReliablility";
+            this.dgvReliablility.Size = new System.Drawing.Size(378, 216);
+            this.dgvReliablility.TabIndex = 31;
             // 
             // cmbResultsFA
             // 
@@ -641,15 +660,15 @@
             this.label20.TabIndex = 29;
             this.label20.Text = "Firearm";
             // 
-            // Form1
+            // ALMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(802, 641);
             this.Controls.Add(this.tabControl1);
-            this.Name = "Form1";
+            this.Name = "ALMain";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFA)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -660,22 +679,22 @@
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSession)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numFailures)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numGroupSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumRoundCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numDistance)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dGVAccuracy)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dGVReliablility)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAccuracy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReliablility)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvFA;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button btnAddFA;
@@ -726,10 +745,10 @@
         private System.Windows.Forms.ComboBox cmbResultsFA;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.DataGridView dGVAccuracy;
-        private System.Windows.Forms.DataGridView dGVReliablility;
+        private System.Windows.Forms.DataGridView dgvAccuracy;
+        private System.Windows.Forms.DataGridView dgvReliablility;
         private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.DataGridView dataGridView4;
+        private System.Windows.Forms.DataGridView dgvSession;
     }
 }
 
