@@ -92,6 +92,10 @@ namespace AmmoLog
                 {
                     MessageBox.Show("Error occured, LoadCaliberList!" + ex.ToString());
                 }
+                finally
+                {
+                    conn.Close();
+                }
             }
         }
 
@@ -116,6 +120,10 @@ namespace AmmoLog
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error occured, LoadFAList!" + ex.ToString());
+                }
+                finally
+                {
+                    conn.Close();
                 }
 
                 SqlDataAdapter dagridfa = new SqlDataAdapter("SELECT f.Brand,f.Model,f.Serial,c.Caliber FROM Firearms f INNER JOIN Calibers c ON f.Caliber=c.CalId", ConnString);
@@ -143,6 +151,10 @@ namespace AmmoLog
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error occured, LoadAmmoList!" + ex.ToString());
+                }
+                finally
+                {
+                    conn.Close();
                 }
             }
         }
