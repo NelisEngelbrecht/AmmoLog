@@ -14,7 +14,6 @@ namespace AmmoLog
     public partial class ALMain : Form
     {
         static string ConnString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\AmmoLogDB.mdf;Integrated Security=True;Connect Timeout=30";
-        SqlConnection con   = new SqlConnection(ConnString);
         public ALMain()
         {
             InitializeComponent();
@@ -27,11 +26,13 @@ namespace AmmoLog
 
         private void btnAddFA_Click(object sender, EventArgs e)
         {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Firearms(Brand,Model,Serial,Caliber) Values('" + tbFABrand.Text + "','" + tbFAModel.Text + "','" + tbFASerial.Text + "','" + cmbFACaliber.SelectedValue + "')", con);
-            cmd.ExecuteNonQuery();
-            con.Close();
-
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("INSERT INTO Firearms(Brand,Model,Serial,Caliber) Values('" + tbFABrand.Text + "','" + tbFAModel.Text + "','" + tbFASerial.Text + "','" + cmbFACaliber.SelectedValue + "')", conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
             LoadFAList();
 
             SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Firearms", ConnString);
@@ -42,20 +43,26 @@ namespace AmmoLog
 
         private void btnAddCaliber_Click(object sender, EventArgs e)
         {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Calibers(Caliber) Values('" + tbCal.Text + "')", con);
-            cmd.ExecuteNonQuery();
-            con.Close();
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("INSERT INTO Calibers(Caliber) Values('" + tbCal.Text + "')", conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
 
             LoadCaliberList();
         }
 
         private void btnAddAmmo_Click(object sender, EventArgs e)
         {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Ammo(Brand,Caliber,Weight,Style) Values('" + tbAmmoBrand.Text + "','" + cmbAmmoCaliber.SelectedValue + "','" + Convert.ToInt32(numAmmoWeight.Value) + "','" + cmbAmmoStyle.Text + "')", con);
-            cmd.ExecuteNonQuery();
-            con.Close();
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("INSERT INTO Ammo(Brand,Caliber,Weight,Style) Values('" + tbAmmoBrand.Text + "','" + cmbAmmoCaliber.SelectedValue + "','" + Convert.ToInt32(numAmmoWeight.Value) + "','" + cmbAmmoStyle.Text + "')", conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
 
             LoadAmmoList();
         }
@@ -172,7 +179,7 @@ namespace AmmoLog
             daRel.Fill(dsRel, "Sessions");
             dgvReliablility.DataSource = dsRel.Tables["Sessions"].DefaultView;
 
-            SqlDataAdapter daAcc = new SqlDataAdapter("SELECT a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS 'Ammunition',AVG(s.GroupSize) AS 'Average Group' FROM Sessions s INNER JOIN Ammo a ON s.Ammo=a.AmmoId WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY s.Ammo,a.Brand,a.Weight,a.Style ORDER BY 'Average Group' ASC", ConnString);
+            SqlDataAdapter daAcc = new SqlDataAdapter("SELECT a.Brand+' '+CONVERT(VARCHAR(20),a.Weight)+'gr '+a.Style AS 'Ammunition',AVG(s.GroupSize) AS 'Average Group',AVG(s.Distance) AS 'Average Distance',(AVG(s.GroupSize)/AVG(s.Distance)) AS 'Accuracy Rating' FROM Sessions s INNER JOIN Ammo a ON s.Ammo=a.AmmoId WHERE s.Firearm = '" + cmbResultsFA.SelectedValue + "' GROUP BY s.Ammo,a.Brand,a.Weight,a.Style ORDER BY 'Average Group' ASC", ConnString);
             DataSet dsAcc = new DataSet();
             daAcc.Fill(dsAcc, "Sessions");
             dgvAccuracy.DataSource = dsAcc.Tables["Sessions"].DefaultView;
@@ -180,10 +187,13 @@ namespace AmmoLog
 
         private void btnAddSession_Click(object sender, EventArgs e)
         {
-            con.Open();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Sessions(Date,Firearm,RangeName,Ammo,RoundCount,Failures,GroupSize,Distance)Values('" + dtDate.Text + "','" + cmbSessionFA.SelectedValue + "','" + tbRange.Text + "','"  + Convert.ToInt32(cmbSessionAmmo.SelectedValue) + "','" + NumRoundCount.Value.ToString() + "','" + Convert.ToInt32(numFailures.Value) + "','" + numGroupSize.Value.ToString() + "','" + numDistance.Value.ToString() + "')", con);
-            cmd.ExecuteNonQuery();
-            con.Close();
+            using (SqlConnection conn = new SqlConnection(ConnString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("INSERT INTO Sessions(Date,Firearm,RangeName,Ammo,RoundCount,Failures,GroupSize,Distance)Values('" + dtDate.Text + "','" + cmbSessionFA.SelectedValue + "','" + tbRange.Text + "','" + Convert.ToInt32(cmbSessionAmmo.SelectedValue) + "','" + NumRoundCount.Value.ToString() + "','" + Convert.ToInt32(numFailures.Value) + "','" + numGroupSize.Value.ToString() + "','" + numDistance.Value.ToString() + "')", conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
 
             LoadSessionData();
         }

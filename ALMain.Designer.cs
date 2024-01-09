@@ -630,7 +630,7 @@
             this.dgvAccuracy.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAccuracy.Location = new System.Drawing.Point(6, 297);
             this.dgvAccuracy.Name = "dgvAccuracy";
-            this.dgvAccuracy.Size = new System.Drawing.Size(378, 216);
+            this.dgvAccuracy.Size = new System.Drawing.Size(761, 216);
             this.dgvAccuracy.TabIndex = 32;
             // 
             // dgvReliablility
@@ -638,7 +638,7 @@
             this.dgvReliablility.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvReliablility.Location = new System.Drawing.Point(6, 62);
             this.dgvReliablility.Name = "dgvReliablility";
-            this.dgvReliablility.Size = new System.Drawing.Size(378, 216);
+            this.dgvReliablility.Size = new System.Drawing.Size(761, 216);
             this.dgvReliablility.TabIndex = 31;
             // 
             // cmbResultsFA
