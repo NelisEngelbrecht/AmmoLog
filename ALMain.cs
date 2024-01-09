@@ -13,7 +13,7 @@ namespace AmmoLog
 {
     public partial class ALMain : Form
     {
-        static string ConnString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Users\\nelis\\source\\repos\\AmmoLog\\AmmoLogDB.mdf;Integrated Security=True;Connect Timeout=30";
+        static string ConnString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\AmmoLogDB.mdf;Integrated Security=True;Connect Timeout=30";
         SqlConnection con   = new SqlConnection(ConnString);
         string selectedFACaliber,selectedFA,selectedAmmo;
         public ALMain()
